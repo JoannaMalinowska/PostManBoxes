@@ -7,9 +7,11 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
 using PostManBoxes.Data;
+using PostManBoxes.Helpers;
 
 namespace PostManBoxes.Controllers
 {
@@ -20,6 +22,7 @@ namespace PostManBoxes.Controllers
         // GET: api/Couriers
         public IQueryable<couriers> Getcouriers()
         {
+            Logger.CreateLog(HttpContext.Current.Request.Url.PathAndQuery, HttpMethod.Get.Method, null);
             return db.couriers;
         }
 
@@ -32,7 +35,7 @@ namespace PostManBoxes.Controllers
             {
                 return NotFound();
             }
-
+            Logger.CreateLog(HttpContext.Current.Request.Url.PathAndQuery, HttpMethod.Get.Method, null);
             return Ok(couriers);
         }
 
@@ -67,7 +70,7 @@ namespace PostManBoxes.Controllers
                     throw;
                 }
             }
-
+            Logger.CreateLog(HttpContext.Current.Request.Url.PathAndQuery, HttpMethod.Put.Method, null);
             return StatusCode(HttpStatusCode.NoContent);
         }
 
@@ -82,7 +85,7 @@ namespace PostManBoxes.Controllers
 
             db.couriers.Add(couriers);
             await db.SaveChangesAsync();
-
+            Logger.CreateLog(HttpContext.Current.Request.Url.PathAndQuery, HttpMethod.Post.Method, null);
             return CreatedAtRoute("DefaultApi", new { id = couriers.id }, couriers);
         }
 
@@ -98,7 +101,7 @@ namespace PostManBoxes.Controllers
 
             db.couriers.Remove(couriers);
             await db.SaveChangesAsync();
-
+            Logger.CreateLog(HttpContext.Current.Request.Url.PathAndQuery, HttpMethod.Delete.Method, null);
             return Ok(couriers);
         }
 
