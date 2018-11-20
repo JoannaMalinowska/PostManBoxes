@@ -7,9 +7,11 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
 using PostManBoxes.Data;
+using PostManBoxes.Helpers;
 
 namespace PostManBoxes.Controllers
 {
@@ -20,6 +22,7 @@ namespace PostManBoxes.Controllers
         // GET: api/Destinations
         public IQueryable<destinations> Getdestinations()
         {
+            Logger.CreateLog(HttpContext.Current.Request.Url.PathAndQuery, HttpMethod.Get.Method, null);
             return db.destinations;
         }
 
@@ -32,7 +35,7 @@ namespace PostManBoxes.Controllers
             {
                 return NotFound();
             }
-
+            Logger.CreateLog(HttpContext.Current.Request.Url.PathAndQuery, HttpMethod.Get.Method, null);
             return Ok(destinations);
         }
 
@@ -67,7 +70,7 @@ namespace PostManBoxes.Controllers
                     throw;
                 }
             }
-
+            Logger.CreateLog(HttpContext.Current.Request.Url.PathAndQuery, HttpMethod.Put.Method, null);
             return StatusCode(HttpStatusCode.NoContent);
         }
 
@@ -82,7 +85,7 @@ namespace PostManBoxes.Controllers
 
             db.destinations.Add(destinations);
             await db.SaveChangesAsync();
-
+            Logger.CreateLog(HttpContext.Current.Request.Url.PathAndQuery, HttpMethod.Post.Method, null);
             return CreatedAtRoute("DefaultApi", new { id = destinations.id }, destinations);
         }
 
@@ -98,7 +101,7 @@ namespace PostManBoxes.Controllers
 
             db.destinations.Remove(destinations);
             await db.SaveChangesAsync();
-
+            Logger.CreateLog(HttpContext.Current.Request.Url.PathAndQuery, HttpMethod.Delete.Method, null);
             return Ok(destinations);
         }
 

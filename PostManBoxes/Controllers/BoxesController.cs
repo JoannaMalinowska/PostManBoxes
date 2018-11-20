@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
 using PostManBoxes.Data;
@@ -22,6 +23,7 @@ namespace PostManBoxes.Controllers
         // GET: api/Boxes
         public IQueryable<boxes> Getboxes()
         {
+            Logger.CreateLog(HttpContext.Current.Request.Url.PathAndQuery, HttpMethod.Get.Method, null);
             return db.boxes;
         }
 
@@ -29,14 +31,19 @@ namespace PostManBoxes.Controllers
         [ResponseType(typeof(boxes))]
         public async Task<IHttpActionResult> Getboxes(long id)
         {
+
+            
+
             boxes boxes = await db.boxes.FindAsync(id);
 
-            var ip = IP.GetIPAddress();
+            string path = HttpContext.Current.Request.Url.PathAndQuery;
 
             if (boxes == null)
             {
                 return NotFound();
             }
+
+            Logger.CreateLog(HttpContext.Current.Request.Url.PathAndQuery, HttpMethod.Get.Method, null);
 
             return Ok(boxes);
         }
@@ -51,6 +58,7 @@ namespace PostManBoxes.Controllers
                 return NotFound();
             }
 
+            Logger.CreateLog(HttpContext.Current.Request.Url.PathAndQuery, HttpMethod.Get.Method, null);
             return Ok(boxes);
         }
 
@@ -71,7 +79,7 @@ namespace PostManBoxes.Controllers
             {
                 return NotFound();
             }
-
+            Logger.CreateLog(HttpContext.Current.Request.Url.PathAndQuery, HttpMethod.Get.Method, null);
             return Ok(transportInformation);
         }
 
@@ -106,7 +114,7 @@ namespace PostManBoxes.Controllers
                     throw;
                 }
             }
-
+            Logger.CreateLog(HttpContext.Current.Request.Url.PathAndQuery, HttpMethod.Put.Method, null);
             return StatusCode(HttpStatusCode.NoContent);
         }
 
@@ -184,6 +192,7 @@ namespace PostManBoxes.Controllers
 
             db.Database.CurrentTransaction.Commit();
 
+            Logger.CreateLog(HttpContext.Current.Request.Url.PathAndQuery, HttpMethod.Post.Method, null);
             return Ok();
         }
 
@@ -210,7 +219,7 @@ namespace PostManBoxes.Controllers
                 return BadRequest();
             }
 
-            
+            Logger.CreateLog(HttpContext.Current.Request.Url.PathAndQuery, HttpMethod.Delete.Method, null);
             return Ok(boxes);
         }
 
@@ -227,5 +236,9 @@ namespace PostManBoxes.Controllers
         {
             return db.boxes.Count(e => e.id == id) > 0;
         }
+
+
+        
+
     }
 }

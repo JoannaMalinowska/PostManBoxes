@@ -226,6 +226,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\IP.cs" />
+    <Compile Include="Helpers\Logger.cs" />
+    <Compile Include="Helpers\ParametersRepo.cs" />
     <Compile Include="Models\Boxes.cs" />
     <Compile Include="Models\OrderModel.cs" />
     <Compile Include="Models\TransportInformation.cs" />
@@ -305,6 +307,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Logs\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

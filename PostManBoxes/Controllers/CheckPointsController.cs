@@ -7,9 +7,11 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
 using PostManBoxes.Data;
+using PostManBoxes.Helpers;
 
 namespace PostManBoxes.Controllers
 {
@@ -20,6 +22,7 @@ namespace PostManBoxes.Controllers
         // GET: api/CheckPoints
         public IQueryable<check_points> Getcheck_points()
         {
+            Logger.CreateLog(HttpContext.Current.Request.Url.PathAndQuery, HttpMethod.Get.Method, null);
             return db.check_points;
         }
 
@@ -32,7 +35,7 @@ namespace PostManBoxes.Controllers
             {
                 return NotFound();
             }
-
+            Logger.CreateLog(HttpContext.Current.Request.Url.PathAndQuery, HttpMethod.Get.Method, null);
             return Ok(check_points);
         }
 
@@ -67,7 +70,7 @@ namespace PostManBoxes.Controllers
                     throw;
                 }
             }
-
+            Logger.CreateLog(HttpContext.Current.Request.Url.PathAndQuery, HttpMethod.Put.Method, null);
             return StatusCode(HttpStatusCode.NoContent);
         }
 
@@ -82,7 +85,7 @@ namespace PostManBoxes.Controllers
 
             db.check_points.Add(check_points);
             await db.SaveChangesAsync();
-
+            Logger.CreateLog(HttpContext.Current.Request.Url.PathAndQuery, HttpMethod.Post.Method, null);
             return CreatedAtRoute("DefaultApi", new { id = check_points.id }, check_points);
         }
 
@@ -98,7 +101,7 @@ namespace PostManBoxes.Controllers
 
             db.check_points.Remove(check_points);
             await db.SaveChangesAsync();
-
+            Logger.CreateLog(HttpContext.Current.Request.Url.PathAndQuery, HttpMethod.Delete.Method, null);
             return Ok(check_points);
         }
 
