@@ -1,5 +1,7 @@
 # PostManBoxes
 
+Kopiujemy plik Web.config do katalogu z projektem
+
 - Po pobraniu projektu należy utworzyć nową bazę z pliku backup lub skryptu sql dołączonego do repo.
 - Po utworzeniu bazy należy zaktualizować connection string znajdujący się w pliku webConfig
 
