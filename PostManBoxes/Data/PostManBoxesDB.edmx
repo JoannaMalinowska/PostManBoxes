@@ -1,0 +1,297 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="postman_pack_dbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="boxes">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="customer_key" Type="nvarchar" MaxLength="25" Nullable="false" />
+          <Property Name="pack_number" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="dimensions" Type="smallint" Nullable="false" />
+          <Property Name="weight" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="to_pay" Type="decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="destination_id" Type="bigint" Nullable="false" />
+          <Property Name="current_check_point" Type="int" Nullable="false" />
+          <Property Name="delivery_status" Type="tinyint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="check_points">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="150" />
+          <Property Name="latitude" Type="decimal" Precision="18" Scale="9" Nullable="false" />
+          <Property Name="longitude" Type="decimal" Precision="18" Scale="9" Nullable="false" />
+        </EntityType>
+        <EntityType Name="couriers">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="courier_id" Type="int" Nullable="false" />
+          <Property Name="pack_id" Type="bigint" Nullable="false" />
+          <Property Name="is_available" Type="bit" />
+        </EntityType>
+        <EntityType Name="destinations">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="country" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="city" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="post_code" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="street" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="house_number" Type="nvarchar" MaxLength="10" />
+          <Property Name="apartment_number" Type="nvarchar" MaxLength="10" />
+          <Property Name="recipient_name" Type="nvarchar" MaxLength="50" />
+          <Property Name="recipient_surname" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK_boxes_check_points">
+          <End Role="check_points" Type="Self.check_points" Multiplicity="1" />
+          <End Role="boxes" Type="Self.boxes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="check_points">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="boxes">
+              <PropertyRef Name="current_check_point" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_boxes_destinations">
+          <End Role="destinations" Type="Self.destinations" Multiplicity="1" />
+          <End Role="boxes" Type="Self.boxes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="destinations">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="boxes">
+              <PropertyRef Name="destination_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_couriers_boxes">
+          <End Role="boxes" Type="Self.boxes" Multiplicity="1" />
+          <End Role="couriers" Type="Self.couriers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="boxes">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="couriers">
+              <PropertyRef Name="pack_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="postman_pack_dbModelStoreContainer">
+          <EntitySet Name="boxes" EntityType="Self.boxes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="check_points" EntityType="Self.check_points" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="couriers" EntityType="Self.couriers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="destinations" EntityType="Self.destinations" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_boxes_check_points" Association="Self.FK_boxes_check_points">
+            <End Role="check_points" EntitySet="check_points" />
+            <End Role="boxes" EntitySet="boxes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_boxes_destinations" Association="Self.FK_boxes_destinations">
+            <End Role="destinations" EntitySet="destinations" />
+            <End Role="boxes" EntitySet="boxes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_couriers_boxes" Association="Self.FK_couriers_boxes">
+            <End Role="boxes" EntitySet="boxes" />
+            <End Role="couriers" EntitySet="couriers" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="postman_pack_dbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="boxes">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="customer_key" Type="String" MaxLength="25" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="pack_number" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="dimensions" Type="Int16" Nullable="false" />
+          <Property Name="weight" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="to_pay" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="destination_id" Type="Int64" Nullable="false" />
+          <Property Name="current_check_point" Type="Int32" Nullable="false" />
+          <Property Name="delivery_status" Type="Byte" Nullable="false" />
+          <NavigationProperty Name="check_points" Relationship="Self.FK_boxes_check_points" FromRole="boxes" ToRole="check_points" />
+          <NavigationProperty Name="destinations" Relationship="Self.FK_boxes_destinations" FromRole="boxes" ToRole="destinations" />
+          <NavigationProperty Name="couriers" Relationship="Self.FK_couriers_boxes" FromRole="boxes" ToRole="couriers" />
+        </EntityType>
+        <EntityType Name="check_points">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="latitude" Type="Decimal" Precision="18" Scale="9" Nullable="false" />
+          <Property Name="longitude" Type="Decimal" Precision="18" Scale="9" Nullable="false" />
+          <NavigationProperty Name="boxes" Relationship="Self.FK_boxes_check_points" FromRole="check_points" ToRole="boxes" />
+        </EntityType>
+        <EntityType Name="couriers">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="courier_id" Type="Int32" Nullable="false" />
+          <Property Name="pack_id" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="boxes" Relationship="Self.FK_couriers_boxes" FromRole="couriers" ToRole="boxes" />
+          <Property Name="is_available" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="destinations">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="city" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="post_code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="street" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="house_number" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="apartment_number" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="recipient_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="recipient_surname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="boxes" Relationship="Self.FK_boxes_destinations" FromRole="destinations" ToRole="boxes" />
+        </EntityType>
+        <Association Name="FK_boxes_check_points">
+          <End Role="check_points" Type="Self.check_points" Multiplicity="1" />
+          <End Role="boxes" Type="Self.boxes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="check_points">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="boxes">
+              <PropertyRef Name="current_check_point" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_boxes_destinations">
+          <End Role="destinations" Type="Self.destinations" Multiplicity="1" />
+          <End Role="boxes" Type="Self.boxes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="destinations">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="boxes">
+              <PropertyRef Name="destination_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_couriers_boxes">
+          <End Role="boxes" Type="Self.boxes" Multiplicity="1" />
+          <End Role="couriers" Type="Self.couriers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="boxes">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="couriers">
+              <PropertyRef Name="pack_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="postman_pack_dbEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="boxes" EntityType="Self.boxes" />
+          <EntitySet Name="check_points" EntityType="Self.check_points" />
+          <EntitySet Name="couriers" EntityType="Self.couriers" />
+          <EntitySet Name="destinations" EntityType="Self.destinations" />
+          <AssociationSet Name="FK_boxes_check_points" Association="Self.FK_boxes_check_points">
+            <End Role="check_points" EntitySet="check_points" />
+            <End Role="boxes" EntitySet="boxes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_boxes_destinations" Association="Self.FK_boxes_destinations">
+            <End Role="destinations" EntitySet="destinations" />
+            <End Role="boxes" EntitySet="boxes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_couriers_boxes" Association="Self.FK_couriers_boxes">
+            <End Role="boxes" EntitySet="boxes" />
+            <End Role="couriers" EntitySet="couriers" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="postman_pack_dbModelStoreContainer" CdmEntityContainer="postman_pack_dbEntities">
+          <EntitySetMapping Name="boxes">
+            <EntityTypeMapping TypeName="postman_pack_dbModel.boxes">
+              <MappingFragment StoreEntitySet="boxes">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="customer_key" ColumnName="customer_key" />
+                <ScalarProperty Name="pack_number" ColumnName="pack_number" />
+                <ScalarProperty Name="dimensions" ColumnName="dimensions" />
+                <ScalarProperty Name="weight" ColumnName="weight" />
+                <ScalarProperty Name="to_pay" ColumnName="to_pay" />
+                <ScalarProperty Name="destination_id" ColumnName="destination_id" />
+                <ScalarProperty Name="current_check_point" ColumnName="current_check_point" />
+                <ScalarProperty Name="delivery_status" ColumnName="delivery_status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="check_points">
+            <EntityTypeMapping TypeName="postman_pack_dbModel.check_points">
+              <MappingFragment StoreEntitySet="check_points">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="latitude" ColumnName="latitude" />
+                <ScalarProperty Name="longitude" ColumnName="longitude" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="couriers">
+            <EntityTypeMapping TypeName="postman_pack_dbModel.couriers">
+              <MappingFragment StoreEntitySet="couriers">
+                <ScalarProperty Name="is_available" ColumnName="is_available" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="courier_id" ColumnName="courier_id" />
+                <ScalarProperty Name="pack_id" ColumnName="pack_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="destinations">
+            <EntityTypeMapping TypeName="postman_pack_dbModel.destinations">
+              <MappingFragment StoreEntitySet="destinations">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="country" ColumnName="country" />
+                <ScalarProperty Name="city" ColumnName="city" />
+                <ScalarProperty Name="post_code" ColumnName="post_code" />
+                <ScalarProperty Name="street" ColumnName="street" />
+                <ScalarProperty Name="house_number" ColumnName="house_number" />
+                <ScalarProperty Name="apartment_number" ColumnName="apartment_number" />
+                <ScalarProperty Name="recipient_name" ColumnName="recipient_name" />
+                <ScalarProperty Name="recipient_surname" ColumnName="recipient_surname" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

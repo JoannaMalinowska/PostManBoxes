@@ -1,24 +1,172 @@
 ﻿<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS, and JavaScript.</p>
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+    <h1>Postman Pack DB<i class='glyphicon glyphicon-inbox' style='width:100px; margin-left: 50px'></i> </h1>
+    @{Html.RenderPartial("_DeleteRecordPartial");}
 </div>
 <div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>ASP.NET Web API is a framework that makes it easy to build HTTP services that reach
-        a broad range of clients, including browsers and mobile devices. ASP.NET Web API
-        is an ideal platform for building RESTful applications on the .NET Framework.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301870">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301871">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301872">Learn more &raquo;</a></p>
+    <div class="col-12">
+        <div>
+            <table id="boxesGrid" class="responsive no-wrap table-striped table-hover table" width="100%" cellspacing="0" border="0">
+                <thead>
+                    <tr>
+                        <th>Competition ID</th>
+                        <th>Lp.</th>
+                        <th>Numer klienta</th>
+                        <th>Numer paczki</th>
+                        <th>Klasa paczki</th>
+                        <th>Waga</th>
+                        <th>Należność</th>
+                        <th>Identyfikator celu</th>
+                        <th>Status</th>
+                        <th>Akcje</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
     </div>
 </div>
+
+<script>
+    var boxId;
+
+    $(document).ready(function () {
+        var table = $("#boxesGrid").DataTable({
+
+            "processing": true, // for show progress bar
+            "serverSide": true, // for process server side
+            "filter": true, // this is for disable filter (search box)
+            "orderMulti": false, // for disable multiple column at once
+         "pageLength": 10,
+
+            "responsive": true,
+            "ajax": {
+                "url": "/Home/GetBoxesList",
+                "type": "POST",
+                "datatype": "json"
+            },
+
+            "columnDefs":
+                [{
+                    "targets": [0],
+                    "visible": false,
+                    "searchable": false
+                },
+                    {
+                        "targets": [1],
+                        "searchable": false,
+                        "orderable": false
+                    },
+
+                {
+                    "targets": [9],
+                    "searchable": false,
+                    "orderable": false
+                }],
+
+            "oLanguage": {
+
+                "sSearch": "Szukaj:",
+                "sLengthMenu": "Wyświetl _MENU_ rekordów na stronie",
+                "sZeroRecords": "Przepraszamy - nie znaleziono żadnego rekordu",
+                "sInfo": "Wyświetlana strona _PAGE_ z _PAGES_",
+                "sInfoEmpty": "Nie ma dostępnych rekordów",
+                "sInfoFiltered": "(przefiltrowano z _MAX_ rekordów)",
+                "oPaginate": {
+                    "sNext": "Następna strona",
+                    "sPrevious": "Poprzednia strona"
+                }
+
+          },
+
+
+
+            "aoColumns": [
+                { "mData": "Id", "name": "Id", "autoWidth": false, },
+                {
+                    "render": function (data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+                },
+                { "mData": "CustomerKey", "name": "CustomerKey", "autoWidth": false },
+                { "mData": "PackNumber", "name": "PackNumber", "autoWidth": false },
+                { "mData": "Dimensions", "name": "Dimensions", "autoWidth": false },
+                { "mData": "Weight", "name": "Weight", "autoWidth": false },
+                { "mData": "ToPay", "name": "ToPay", "autoWidth": false },
+                { "mData": "DestinationId", "name": "DestinationId", "autoWidth": false },
+                { "mData": "DeliveryStatus", "name": "DeliveryStatus", "autoWidth": false },
+                {
+                    "render": function (data, type, full, meta) {
+                        @*var urlShowEdit = '@Url.Action("DisplayEditView", "Competitions")?id=' + full.id;
+                        var urlShowDetail = '@Url.Action("ShowDetails", "Competitions")?id=' + full.id;*@
+
+                        return "<div class='btn-group'>"+
+                            "<a class='btn btn-danger' data-toggle='tooltip' data-placement='bottom' title='Anuluj przesyłkę' href='#' onclick='ShowDeleteModal("+full.Id+")'><i class='glyphicon glyphicon-trash' style='width:30px'></i></a > " +
+                            "<a class='btn btn-info' data-toggle='tooltip' data-placement='bottom' title='Zmień status' href='#' style='margin-left: 10px; margin-right: 10px;'><i class='glyphicon glyphicon-globe' style='width: 30px'> </i></a>" +
+                            "</div>";
+                    }
+                },
+
+
+            ],
+             "initComplete": function (settings, json) {
+             var info = this.api().page.info();
+             var rowCount = info.recordsTotal;
+             if (rowCount <= 10) {
+
+                 $('.dataTables_paginate').hide();
+             } else {
+
+                 $('.dataTables_paginate').show();
+             }
+
+         }
+        });
+
+        $('#boxesGrid').on('draw.dt', function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+
+
+
+    });
+
+    function ShowDeleteModal(id) {
+
+        $('#deleteModal').modal("show");
+        boxId = id;
+
+       // alert(boxId);
+    }
+
+    
+    function DeleteData() {
+     
+
+        var contentModel = 'application/x-www-form-urlencoded; charset=utf-8';
+
+        console.log(boxId);
+        $.ajax(
+            {
+                async: true,
+                url: '/api/Boxes/' + boxId,
+                type: "DELETE",
+                data: {
+                  
+                },
+                contentType: contentModel,
+                dataType: 'json'
+
+            }
+
+        ).done(function (resp) {
+
+
+            window.location.reload();
+            $('#deleteModal').modal('hide');
+
+        }).fail(function (resp) {
+            $('#deleteModal').modal('hide');
+        });
+    }
+    
+</script>

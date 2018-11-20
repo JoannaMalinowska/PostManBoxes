@@ -19,6 +19,18 @@ namespace PostManBoxes
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
+            config.Routes.MapHttpRoute(
+                name: "DefaultApi2",
+                routeTemplate: "api/{controller}/{action}/{key}",
+                defaults: new { key = RouteParameter.Optional }
+            );
+
+            config.Routes.MapHttpRoute(
+                name: "SendOrder",
+                routeTemplate: "api/Boxes/Postboxes"
+           
+            );
         }
     }
 }
