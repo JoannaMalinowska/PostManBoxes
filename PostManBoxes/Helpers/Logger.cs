@@ -18,9 +18,8 @@ namespace PostManBoxes.Helpers
                 StreamWriter sw = new StreamWriter(logFilePath, true);
                 StringBuilder sb = new StringBuilder();
 
-                sb.Append(IP.GetIPAddress())
-                    .Append(" ")
-                    .Append(DateTime.UtcNow.ToLongDateString() + " " + DateTime.UtcNow.ToLongTimeString())
+                sb
+                    .Append(DateTime.UtcNow.ToString("yyyy-MM-dd") + " " + DateTime.UtcNow.ToLongTimeString())
                     .Append(" ")
                     .Append(method.ToUpper())
                     .Append(" ")
