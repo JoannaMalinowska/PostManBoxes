@@ -20,13 +20,13 @@ namespace PostManBoxes.Helpers
 
                 sb.Append(IP.GetIPAddress())
                     .Append(" ")
-                    .Append("[" + DateTime.UtcNow.ToLongDateString() +" "+DateTime.UtcNow.ToLongTimeString()+ "]")
+                    .Append(DateTime.UtcNow.ToLongDateString() + " " + DateTime.UtcNow.ToLongTimeString())
                     .Append(" ")
                     .Append(method.ToUpper())
                     .Append(" ")
-                    .Append(apiURL)
-                    .Append(" ")
-                    .Append(status);
+                    .Append(apiURL);
+                    
+                    
                 sw.WriteLine(sb.ToString());
 
                 sw.Flush();
