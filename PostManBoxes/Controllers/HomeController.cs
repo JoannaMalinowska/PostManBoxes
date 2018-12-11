@@ -36,8 +36,10 @@ namespace PostManBoxes.Controllers
             int skip = start != null ? Convert.ToInt32(start) : 0;
             int recordsTotal = 0;
 
+
+
             // Getting all Customer data    
-            List<Boxes> boxesData = dbContext.boxes.Select(x => new Boxes()
+            List<CustomPackModel> boxesData = dbContext.boxes.Select(x => new CustomPackModel()
             {
                 Id = x.id,
                 CustomerKey = x.customer_key,
@@ -47,10 +49,15 @@ namespace PostManBoxes.Controllers
                 ToPay = x.to_pay,
                 DestinationId = x.destination_id,
                 CurrentCheckPoint = x.current_check_point,
-                DeliveryStatus = x.delivery_status
+                DeliveryStatus = x.delivery_status,
+                DestinationName = x.destinations.country + " " + x.destinations.city + " " + x.destinations.street + " " + x.destinations.house_number + " " + x.destinations.apartment_number
+                
             }).ToList();
 
-            
+            foreach ( var pack in boxesData)
+            {
+                pack.DeliveryStatusName = Enum.GetName(typeof(StatusType), pack.DeliveryStatus);
+            }
 
             //Sorting    
             if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDir)))
