@@ -12,6 +12,7 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using PostManBoxes.Data;
 using PostManBoxes.Helpers;
+using PostManBoxes.Models;
 
 namespace PostManBoxes.Controllers
 {
@@ -20,10 +21,19 @@ namespace PostManBoxes.Controllers
         private postman_pack_dbEntities db = new postman_pack_dbEntities();
 
         // GET: api/CheckPoints
-        public IQueryable<check_points> Getcheck_points()
+        public List<CheckPointcs> Getcheck_points()
         {
             Logger.CreateLog(HttpContext.Current.Request.Url.PathAndQuery, HttpMethod.Get.Method, null);
-            return db.check_points;
+            var checkPointsList =  db.check_points.Select(x => new CheckPointcs()
+            {
+                id = x.id,
+                name =x.name,
+                latitude = x.latitude,
+                longitude = x.longitude
+            }).ToList();
+
+            return checkPointsList;
+
         }
 
         // GET: api/CheckPoints/5

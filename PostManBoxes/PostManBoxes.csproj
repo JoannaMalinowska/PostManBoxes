@@ -229,6 +229,7 @@
     <Compile Include="Helpers\Logger.cs" />
     <Compile Include="Helpers\ParametersRepo.cs" />
     <Compile Include="Models\Boxes.cs" />
+    <Compile Include="Models\CheckPointcs.cs" />
     <Compile Include="Models\CustomPackModel.cs" />
     <Compile Include="Models\OrderModel.cs" />
     <Compile Include="Models\StatusType.cs" />
